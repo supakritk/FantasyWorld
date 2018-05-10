@@ -105,6 +105,7 @@ void Map::setSpawnData(int x, int y, int hp)
 
 void Map::spawner()
 {
+	this->getTurn();
 	for (int i = 0; i < m_number; i++)
 	{
 		this->singleSpawner(i);
@@ -127,6 +128,15 @@ void Map::singleSpawner(int value)
 	}
 }
 
+void Map::getTurn()
+{ 
+	cout << endl;
+	cout << "====================================================================================================" << endl;
+	cout << endl;
+	cout << "Turn: " << turn << endl;
+	turn++;
+}
+
 void Map::nextTurn()
 {
 	clock_t startt, endt;
@@ -138,10 +148,9 @@ void Map::nextTurn()
 		difft = ((float)endt - (float)startt)/CLOCKS_PER_SEC;
 		if (difft > 3.0)
 		{
+			
 			startt = clock();
-			cout << endl;
-			cout << "====================================================================================================" << endl;
-			cout << endl;
+			this->getTurn();
 			for (int i = 0; i < m_number; i++)
 			{
 				monsters[i].reduceHP();

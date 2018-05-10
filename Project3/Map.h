@@ -6,6 +6,7 @@ private:
 	int m_number = 100;
 	int row = 30;
 	int col = 30;
+	int turn = 1;
 	int **mapdata = nullptr;
 	Monster *monsters = new Monster[m_number];
 public:
@@ -22,6 +23,7 @@ public:
 	int randPosY();
 	void setRow(int x);
 	void setCol(int y);
+	void getTurn();
 	int getRow();
 	int getCol();
 	void spawner();
