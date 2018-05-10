@@ -11,8 +11,11 @@ private:
 public:
 	Map();
 	Map(int x, int y, int percent);
+	Map(int percent);
 	virtual ~Map();
 	void initMap();
+	void setNumber(int x, int y, int percent);
+	void setNumber(int percent);
 	void setSpawnData(int x, int y, int hp);
 	void drawMap();
 	int randPosX();

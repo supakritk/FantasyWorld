@@ -8,9 +8,14 @@ Map::Map()
 
 Map::Map(int x, int y, int percent)
 {
-	m_number = (x * y) * (percent / 100.0);
+	this->setNumber(x, y, percent);
 	this->setRow(x);
 	this->setCol(y);
+}
+
+Map::Map(int percent)
+{
+	this->setNumber(percent);
 }
 
 
@@ -81,6 +86,16 @@ int Map::randPosX()
 int Map::randPosY()
 {
 	return rand() % col;
+}
+
+void Map::setNumber(int x, int y, int percent)
+{
+	m_number = (x * y) * (percent / 100.0);
+}
+
+void Map::setNumber(int percent)
+{
+	m_number = (row * col) * (percent / 100.0);
 }
 
 void Map::setSpawnData(int x, int y, int hp) 

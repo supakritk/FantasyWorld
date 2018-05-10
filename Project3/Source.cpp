@@ -2,7 +2,7 @@
 
 int main() {
 	srand(time(NULL));
-	Map* world = new Map(5,5,50);
+	Map* world = new Map(30,30,50);
 	world->initMap();
 	world->spawner();
 	world->drawMap();
