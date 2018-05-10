@@ -2,13 +2,17 @@
 #include "Header.h"
 class Monster
 {
+private:
+	int m_HP;
+	int m_posx;
+	int m_posy;
 public:
 	Monster();
 	virtual ~Monster();
-	void spawn();
 	int getPosX();
 	int getPosY();
-	void initHP();
+	void spawn(int x, int y);
+	void setHP();
 	int getHP();
 	void reduceHP();
 };
