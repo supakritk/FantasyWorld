@@ -104,7 +104,7 @@ void Map::singleSpawner(const int& value)
 		int m_row = this->randPosX();
 		int m_col = this->randPosY();
 
-		if (mapdata[m_row][m_col] == 0)
+		if (mapdata[m_row][m_col] == INIT_HP)
 		{
 			monsters.push_back(make_shared<Monster>());
 			monsters[value]->spawn(m_row, m_col);
@@ -129,7 +129,7 @@ void Map::nextTurn()
 	{
 		monsters[i]->reduceHP();
 		this->setSpawnData(monsters[i]->getPosX(), monsters[i]->getPosY(), monsters[i]->getHP());
-		if (monsters[i]->getHP() == 0)
+		if (monsters[i]->getHP() == INIT_HP)
 		{
 			this->singleSpawner(i);
 		}

@@ -14,12 +14,12 @@ void Monster::spawn(const int& x, const int& y)
 {
 	m_posx = x;
 	m_posy = y;
-	m_HP = rand() % 3 + 5;
+	m_HP = rand() % START_HP + HP_RANGE;
 }
 
 void Monster::setHP()
 {
-	m_HP = rand() % 3 + 5;
+	m_HP = rand() % START_HP + HP_RANGE;
 }
 
 int Monster::getHP()
