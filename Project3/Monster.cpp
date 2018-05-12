@@ -1,4 +1,4 @@
-#include "Monster.h"
+#include "Monster.hpp"
 
 
 
@@ -6,21 +6,20 @@ Monster::Monster()
 {
 }
 
-
 Monster::~Monster()
 {
 }
 
-void Monster::spawn(int x, int y)
+void Monster::spawn(const int& x, const int& y)
 {
 	m_posx = x;
 	m_posy = y;
-	m_HP = rand() % 10 + 5;
+	m_HP = rand() % 3 + 5;
 }
 
 void Monster::setHP()
 {
-	m_HP = rand() % 10 + 5;
+	m_HP = rand() % 3 + 5;
 }
 
 int Monster::getHP()

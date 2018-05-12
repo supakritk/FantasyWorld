@@ -1,5 +1,5 @@
 #pragma once
-#include "Header.h"
+#include "Header.hpp"
 class Monster
 {
 private:
@@ -11,7 +11,7 @@ public:
 	virtual ~Monster();
 	int getPosX();
 	int getPosY();
-	void spawn(int x, int y);
+	void spawn(const int& x, const int& y);
 	void setHP();
 	int getHP();
 	void reduceHP();

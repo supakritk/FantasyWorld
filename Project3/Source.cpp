@@ -1,18 +1,23 @@
-#include "Map.h"
+#include "Map.hpp"
 
 int main() {
+
+	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
+
 	int r, c, p;
-	srand(time(NULL));
+	srand((unsigned int)time(NULL));
 	cout << "Pls input number of row: ";
 	cin >> r;
 	cout << "Pls input number of collumn: ";
 	cin >> c;
-	cout << "Pls input monster percent you want to spawn on map: ";
+	cout << "Pls input number of monsters you want to spawn on map: ";
 	cin >> p;
 
-	Map* world = new Map(r,c,p);
+	REQUIRE(r * c >= p);
+
+	auto world = make_shared<Map>(r, c, p);
+
 	world->initMap();
 	world->spawner();
-	world->drawMap();
-	world->nextTurn();
+	world->autoNextTurn();
 }

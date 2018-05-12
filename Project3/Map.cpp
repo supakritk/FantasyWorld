@@ -1,44 +1,33 @@
-#include "Map.h"
-
+#include "Map.hpp"
 
 
 Map::Map()
 {
 }
 
-Map::Map(int x, int y, int percent)
+Map::Map(const int& x, const int& y, const int& number)
 {
-	this->setNumber(x, y, percent);
+	this->setNumber(number);
 	this->setRow(x);
 	this->setCol(y);
 }
 
-Map::Map(int percent)
+Map::Map(const int& number)
 {
-	this->setNumber(percent);
+	this->setNumber(number);
 }
-
 
 Map::~Map()
 {
-	for (int i = 0; i < row; i++)
-	{
-		delete[] mapdata[i];
-	}
-	delete[] mapdata;
-	delete[] monsters;
 }
 
 void Map::initMap()
-{
-	mapdata = new int*[row];
-
-	for (int i = 0; i < row; i++)
-		mapdata[i] = new int[col];
+{	
+	mapdata.resize(row, vector<int>(col));
 
 	for (int i = 0; i < row; i++)
 		for (int j = 0; j < col; j++)
-			mapdata[i][j] = 0;
+			mapdata[i][j] = INIT_HP;
 }
 
 void Map::drawMap()
@@ -47,9 +36,9 @@ void Map::drawMap()
 	{
 		for (int j = 0; j < col; ++j)
 		{
-			if (mapdata[i][j] < 10 & mapdata[i][j] != 0)
+			if (mapdata[i][j] < 10 & mapdata[i][j] != INIT_HP)
 				cout << "-" << mapdata[i][j] << " ";
-			else if(mapdata[i][j] == 0)
+			else if(mapdata[i][j] == INIT_HP)
 				cout << "--" << " ";
 			else
 				cout << mapdata[i][j] << " ";
@@ -58,12 +47,12 @@ void Map::drawMap()
 	}
 }
 
-void Map::setRow(int x)
+void Map::setRow(const int& x)
 {
 	row = x;
 }
 
-void Map::setCol(int y)
+void Map::setCol(const int& y)
 {
 	col = y;
 }
@@ -88,17 +77,12 @@ int Map::randPosY()
 	return rand() % col;
 }
 
-void Map::setNumber(int x, int y, int percent)
+void Map::setNumber(const int& number)
 {
-	m_number = (x * y) * (percent / 100.0);
+	m_number = number;
 }
 
-void Map::setNumber(int percent)
-{
-	m_number = (row * col) * (percent / 100.0);
-}
-
-void Map::setSpawnData(int x, int y, int hp) 
+void Map::setSpawnData(const int& x, const int& y, const int& hp)
 {
 	mapdata[x][y] = hp;
 }
@@ -110,9 +94,10 @@ void Map::spawner()
 	{
 		this->singleSpawner(i);
 	}
+	this->drawMap();
 }
 
-void Map::singleSpawner(int value)
+void Map::singleSpawner(const int& value)
 {
 	while (true)
 	{
@@ -121,8 +106,9 @@ void Map::singleSpawner(int value)
 
 		if (mapdata[m_row][m_col] == 0)
 		{
-			monsters[value].spawn(m_row, m_col);
-			this->setSpawnData(m_row, m_col, monsters[value].getHP());
+			monsters.push_back(make_shared<Monster>());
+			monsters[value]->spawn(m_row, m_col);
+			this->setSpawnData(m_row, m_col, monsters[value]->getHP());
 			break;
 		}
 	}
@@ -139,28 +125,35 @@ void Map::getTurn()
 
 void Map::nextTurn()
 {
+	for (int i = 0; i < m_number; i++)
+	{
+		monsters[i]->reduceHP();
+		this->setSpawnData(monsters[i]->getPosX(), monsters[i]->getPosY(), monsters[i]->getHP());
+		if (monsters[i]->getHP() == 0)
+		{
+			this->singleSpawner(i);
+		}
+	}
+}
+
+void Map::autoNextTurn()
+{
 	clock_t startt, endt;
 	float difft;
 	startt = clock();
-	while (true)
+	bool con = true;
+	while (con)
 	{
 		endt = clock();
-		difft = ((float)endt - (float)startt)/CLOCKS_PER_SEC;
-		if (difft > 3.0)
+		difft = ((float)endt - (float)startt) / CLOCKS_PER_SEC;
+		if (difft > DIFF)
 		{
-			
 			startt = clock();
 			this->getTurn();
-			for (int i = 0; i < m_number; i++)
-			{
-				monsters[i].reduceHP();
-				this->setSpawnData(monsters[i].getPosX(), monsters[i].getPosY(), monsters[i].getHP());
-				if (monsters[i].getHP() == 0)
-				{
-					this->singleSpawner(i);
-				}
-			}
+			this->nextTurn();
 			this->drawMap();
 		}
+		if (turn > MAX_TURN)
+			con = !con;
 	}
 }
