@@ -41,3 +41,9 @@ void Monster::reduceHP()
 {
 	m_HP--;
 }
+
+int Monster::getRandAtk()
+{
+	m_atk = rand() % START_ATK + ATK_RANGE;
+	return m_atk;
+}

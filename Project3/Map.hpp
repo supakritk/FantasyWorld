@@ -1,5 +1,6 @@
 #pragma once
 #include "Monster.hpp"
+#include "Player.hpp"
 class Map
 {
 private:
@@ -14,6 +15,8 @@ private:
 	
 	vector<vector<int>> mapdata;
 	vector<shared_ptr<Monster>> monsters;
+	shared_ptr<Player> hero = make_shared<Player>();
+
 public:
 	Map();
 	Map(const int& x, const int& y, const int& number);
@@ -22,6 +25,7 @@ public:
 	void initMap();
 	void setNumber(const int& number);
 	void setSpawnData(const int& x, const int& y, const int& hp);
+	void setPlayerData(const int& x, const int& y, const int& hp);
 	void drawMap();
 	int randPosX();
 	int randPosY();
@@ -32,6 +36,7 @@ public:
 	int getCol();
 	void spawner();
 	void singleSpawner(const int& value);
+	void playerSpawner();
 	void autoNextTurn();
 	void nextTurn();
 };

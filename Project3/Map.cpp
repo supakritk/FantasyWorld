@@ -36,8 +36,15 @@ void Map::drawMap()
 	{
 		for (int j = 0; j < col; ++j)
 		{
-			if (mapdata[i][j] < 10 & mapdata[i][j] != INIT_HP)
-				cout << "-" << mapdata[i][j] << " ";
+			if (i == hero->getPosX() && j == hero->getPosY())
+			{
+				if(mapdata[i][j] < 10 && mapdata[i][j] != INIT_HP)
+					cout << green << "-" << mapdata[i][j] << white << " ";
+				else
+					cout << green << mapdata[i][j] << white << " ";
+			}
+			else if (mapdata[i][j] < 10 && mapdata[i][j] != INIT_HP)
+				cout << red << "-" << mapdata[i][j] << white << " ";
 			else if(mapdata[i][j] == INIT_HP)
 				cout << "--" << " ";
 			else
@@ -87,6 +94,11 @@ void Map::setSpawnData(const int& x, const int& y, const int& hp)
 	mapdata[x][y] = hp;
 }
 
+void Map::setPlayerData(const int& x, const int& y, const int& hp)
+{
+	mapdata[x][y] = hp;
+}
+
 void Map::spawner()
 {
 	this->getTurn();
@@ -94,6 +106,7 @@ void Map::spawner()
 	{
 		this->singleSpawner(i);
 	}
+	this->playerSpawner();
 	this->drawMap();
 }
 
@@ -110,6 +123,20 @@ void Map::singleSpawner(const int& value)
 			monsters[value]->spawn(m_row, m_col);
 			this->setSpawnData(m_row, m_col, monsters[value]->getHP());
 			break;
+		}
+	}
+}
+
+void Map::playerSpawner()
+{
+	while(hero->getFlag())
+	{
+		int p_row = this->randPosX();
+		int p_col = this->randPosY();
+		if (mapdata[p_row][p_col] == INIT_HP)
+		{
+			hero->summon(p_row, p_col);
+			this->setPlayerData(hero->getPosX(), hero->getPosY(), hero->getHP());
 		}
 	}
 }
