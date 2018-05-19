@@ -24,5 +24,6 @@ public:
 	void reduceHP();
 	int getRandAtk();
 	int getType();
+	void attacked(const int& dmg);
 };
 

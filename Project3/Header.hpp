@@ -13,6 +13,7 @@
 #include <assert.h>
 #include <string>
 #include <windows.h>
+#include <conio.h>
 
 #define REQUIRE(condition) assert(condition)
 #define PROMISE(condition) assert(condition)

@@ -28,7 +28,7 @@ public:
 	~Map();
 	void initMap();
 	void setNumber(const int& number);
-	void setSpawnData(const int& x, const int& y, const int& type);
+	void setMapData(const int& x, const int& y, const int& type);
 	void drawMap();
 	int randPosX();
 	int randPosY();
@@ -40,7 +40,13 @@ public:
 	void spawner();
 	void singleSpawner(const int& value);
 	void playerSpawner();
-
+	void playerController();
+	void playerMoveUp();
+	void playerMoveLeft();
+	void playerMoveDown();
+	void playerMoveRight();
+	void checkPrev();
+	void checkCurr();
 
 	//deprecated
 	void autoNextTurn();

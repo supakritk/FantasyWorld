@@ -35,5 +35,6 @@ public:
 	bool getFlag();
 	void setFlag();
 	int getType();
+	void attacked(const int& dmg);
 };
 

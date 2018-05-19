@@ -18,6 +18,7 @@ int main() {
 
 	world->initMap();
 	world->spawner();
+	world->playerController();
 	system("pause");
 
 	return 0;
