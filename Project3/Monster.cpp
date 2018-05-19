@@ -47,3 +47,8 @@ int Monster::getRandAtk()
 	m_atk = rand() % START_ATK + ATK_RANGE;
 	return m_atk;
 }
+
+int Monster::getType()
+{
+	return TYPE;
+}

@@ -23,11 +23,11 @@ Map::~Map()
 
 void Map::initMap()
 {	
-	mapdata.resize(row, vector<int>(col));
+	mapdata.resize(row, std::vector<int>(col));
 
 	for (int i = 0; i < row; i++)
 		for (int j = 0; j < col; j++)
-			mapdata[i][j] = INIT_HP;
+			mapdata[i][j] = INIT;
 }
 
 void Map::drawMap()
@@ -36,21 +36,17 @@ void Map::drawMap()
 	{
 		for (int j = 0; j < col; ++j)
 		{
-			if (i == hero->getPosX() && j == hero->getPosY())
-			{
-				if(mapdata[i][j] < 10 && mapdata[i][j] != INIT_HP)
-					cout << green << "-" << mapdata[i][j] << white << " ";
-				else
-					cout << green << mapdata[i][j] << white << " ";
-			}
-			else if (mapdata[i][j] < 10 && mapdata[i][j] != INIT_HP)
-				cout << red << "-" << mapdata[i][j] << white << " ";
-			else if(mapdata[i][j] == INIT_HP)
-				cout << "--" << " ";
-			else
-				cout << mapdata[i][j] << " ";
+			//TO-DO: Draw map with color
+			if (mapdata[i][j] == INIT)
+				std::cout << EMPTY << EMPTY << " ";
+			else if(mapdata[i][j] == T_MONSTER)
+				std::cout << EMPTY << red << MONSTER << white << " ";
+			else if (mapdata[i][j] == T_HERO)
+				std::cout << green << HERO << white << EMPTY << white << " ";
+			else if (mapdata[i][j] == T_BOTH)
+				std::cout << green << HERO << red << MONSTER << white << " ";
 		}
-		cout << endl;
+		std::cout << std::endl;
 	}
 }
 
@@ -89,14 +85,9 @@ void Map::setNumber(const int& number)
 	m_number = number;
 }
 
-void Map::setSpawnData(const int& x, const int& y, const int& hp)
+void Map::setSpawnData(const int& x, const int& y, const int& type)
 {
-	mapdata[x][y] = hp;
-}
-
-void Map::setPlayerData(const int& x, const int& y, const int& hp)
-{
-	mapdata[x][y] = hp;
+	mapdata[x][y] = type;
 }
 
 void Map::spawner()
@@ -117,11 +108,11 @@ void Map::singleSpawner(const int& value)
 		int m_row = this->randPosX();
 		int m_col = this->randPosY();
 
-		if (mapdata[m_row][m_col] == INIT_HP)
+		if (mapdata[m_row][m_col] == INIT)
 		{
-			monsters.push_back(make_shared<Monster>());
+			monsters.push_back(std::make_shared<Monster>());
 			monsters[value]->spawn(m_row, m_col);
-			this->setSpawnData(m_row, m_col, monsters[value]->getHP());
+			this->setSpawnData(m_row, m_col, monsters[value]->getType());
 			break;
 		}
 	}
@@ -133,30 +124,46 @@ void Map::playerSpawner()
 	{
 		int p_row = this->randPosX();
 		int p_col = this->randPosY();
-		if (mapdata[p_row][p_col] == INIT_HP)
+		if (mapdata[p_row][p_col] == INIT)
 		{
 			hero->summon(p_row, p_col);
-			this->setPlayerData(hero->getPosX(), hero->getPosY(), hero->getHP());
+			this->setSpawnData(hero->getPosX(), hero->getPosY(), hero->getType());
 		}
 	}
 }
 
 void Map::getTurn()
 { 
-	cout << endl;
-	cout << "====================================================================================================" << endl;
-	cout << endl;
-	cout << "Turn: " << turn << endl;
+	std::cout << std::endl;
+	std::cout << "====================================================================================================" << std::endl;
+	std::cout << std::endl;
+	std::cout << "Turn: " << turn << std::endl;
 	turn++;
 }
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*---------------------- Old Next Turn -----------------------------*/
 void Map::nextTurn()
 {
 	for (int i = 0; i < m_number; i++)
 	{
 		monsters[i]->reduceHP();
 		this->setSpawnData(monsters[i]->getPosX(), monsters[i]->getPosY(), monsters[i]->getHP());
-		if (monsters[i]->getHP() == INIT_HP)
+		if (monsters[i]->getHP() == ABSOLUTE_ZERO)
 		{
 			this->singleSpawner(i);
 		}
@@ -184,3 +191,5 @@ void Map::autoNextTurn()
 			con = !con;
 	}
 }
+
+/*---------------------- END Old Next Turn -----------------------------*/

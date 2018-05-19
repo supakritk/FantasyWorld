@@ -1,7 +1,6 @@
 #include "Player.hpp"
 
 
-
 Player::Player()
 {
 }
@@ -87,4 +86,9 @@ bool Player::getFlag()
 void Player::setFlag()
 {
 	is_death = !is_death;
+}
+
+int Player::getType()
+{
+	return TYPE;
 }

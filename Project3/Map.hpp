@@ -4,18 +4,22 @@
 class Map
 {
 private:
-	const int INIT_HP = 0;
+	const int ABSOLUTE_ZERO = 0;
+	const std::string HERO = "H";
+	const std::string MONSTER = "M";
+	const std::string EMPTY = "-";
 	const float DIFF = 2.0;
 	const int MAX_TURN = 5;
+	const enum TYPE { INIT = 0, T_MONSTER = 1, T_HERO = 2, T_BOTH = 3};
 
 	int m_number = 100;
 	int row = 30;
 	int col = 30;
 	int turn = 1;
 	
-	vector<vector<int>> mapdata;
-	vector<shared_ptr<Monster>> monsters;
-	shared_ptr<Player> hero = make_shared<Player>();
+	std::vector<std::vector<int>> mapdata;
+	std::vector<std::shared_ptr<Monster>> monsters;
+	std::shared_ptr<Player> hero = std::make_shared<Player>();
 
 public:
 	Map();
@@ -24,8 +28,7 @@ public:
 	~Map();
 	void initMap();
 	void setNumber(const int& number);
-	void setSpawnData(const int& x, const int& y, const int& hp);
-	void setPlayerData(const int& x, const int& y, const int& hp);
+	void setSpawnData(const int& x, const int& y, const int& type);
 	void drawMap();
 	int randPosX();
 	int randPosY();
@@ -37,6 +40,9 @@ public:
 	void spawner();
 	void singleSpawner(const int& value);
 	void playerSpawner();
+
+
+	//deprecated
 	void autoNextTurn();
 	void nextTurn();
 };

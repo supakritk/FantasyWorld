@@ -8,6 +8,7 @@ private:
 	const int HP_RANGE = 10;
 	const int START_ATK = 2;
 	const int ATK_RANGE = 5;
+	const int TYPE = 2;
 
 	int p_posx = 0;
 	int p_posy = 0;
@@ -33,5 +34,6 @@ public:
 	void reduceHP(const int& atk);
 	bool getFlag();
 	void setFlag();
+	int getType();
 };
 

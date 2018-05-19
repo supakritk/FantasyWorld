@@ -1,5 +1,7 @@
 #pragma once
 #define _CRTDBG_MAP_ALLOC
+#define W_WIDTH 800
+#define W_HEIGHT 800
 
 #include <stdlib.h>
 #include <crtdbg.h>
@@ -15,9 +17,7 @@
 #define REQUIRE(condition) assert(condition)
 #define PROMISE(condition) assert(condition)
 
-using namespace std;
-
-inline ostream& blue(ostream &s)
+inline std::ostream& blue(std::ostream &s)
 {
 	HANDLE hStdout = GetStdHandle(STD_OUTPUT_HANDLE);
 	SetConsoleTextAttribute(hStdout, FOREGROUND_BLUE
@@ -25,7 +25,7 @@ inline ostream& blue(ostream &s)
 	return s;
 }
 
-inline ostream& red(ostream &s)
+inline std::ostream& red(std::ostream &s)
 {
 	HANDLE hStdout = GetStdHandle(STD_OUTPUT_HANDLE);
 	SetConsoleTextAttribute(hStdout,
@@ -33,7 +33,7 @@ inline ostream& red(ostream &s)
 	return s;
 }
 
-inline ostream& green(ostream &s)
+inline std::ostream& green(std::ostream &s)
 {
 	HANDLE hStdout = GetStdHandle(STD_OUTPUT_HANDLE);
 	SetConsoleTextAttribute(hStdout,
@@ -41,7 +41,7 @@ inline ostream& green(ostream &s)
 	return s;
 }
 
-inline ostream& yellow(ostream &s)
+inline std::ostream& yellow(std::ostream &s)
 {
 	HANDLE hStdout = GetStdHandle(STD_OUTPUT_HANDLE);
 	SetConsoleTextAttribute(hStdout,
@@ -49,7 +49,7 @@ inline ostream& yellow(ostream &s)
 	return s;
 }
 
-inline ostream& white(ostream &s)
+inline std::ostream& white(std::ostream &s)
 {
 	HANDLE hStdout = GetStdHandle(STD_OUTPUT_HANDLE);
 	SetConsoleTextAttribute(hStdout,
