@@ -85,7 +85,7 @@ bool Player::getFlag()
 
 void Player::setFlag()
 {
-	is_death = !is_death;
+	is_death = false;
 }
 
 int Player::getType()
