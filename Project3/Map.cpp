@@ -225,7 +225,7 @@ void Map::singleSpawner(const int& value)
 
 void Map::playerSpawner()
 {
-	while(hero->getFlag() == false)
+	while(hero->getFlag() == true)
 	{
 		int p_row = this->randPosX();
 		int p_col = this->randPosY();
