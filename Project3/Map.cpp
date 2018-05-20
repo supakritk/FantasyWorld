@@ -115,7 +115,7 @@ void Map::displayStat()
 {
 	int monstervalue = monsterdata[hero->getPosX()][hero->getPosY()];
 
-	if (hero->getFlag() == true)
+	if (hero->getFlag())
 	{
 		std::cout << red << "Hero is death." << std::endl;
 		std::cout << red << "GAME OVER" << white << std::endl;
@@ -225,7 +225,7 @@ void Map::singleSpawner(const int& value)
 
 void Map::playerSpawner()
 {
-	while(hero->getFlag() == true)
+	while(hero->getFlag())
 	{
 		int p_row = this->randPosX();
 		int p_col = this->randPosY();
@@ -307,12 +307,12 @@ void Map::playerMoveRight()
 
 void Map::checkAfterAtk(const int& value)
 {
-	if (monsters[value]->getHP() == ABSOLUTE_ZERO && hero->getHP() > ABSOLUTE_ZERO)
+	if (monsters[value]->getHP() == ABSOLUTE_ZERO && !hero->getFlag())
 	{
 		this->setMapData(hero->getPosX(), hero->getPosY(), hero->getType());
 		this->setMonsterData(hero->getPosX(), hero->getPosY(), NULL);
 	}	
-	else if (hero->getHP() == ABSOLUTE_ZERO && monsters[value]->getHP() > ABSOLUTE_ZERO)
+	else if (hero->getFlag() && monsters[value]->getHP() > ABSOLUTE_ZERO)
 		this->setMapData(hero->getPosX(), hero->getPosY(), T_MONSTER);
 	else
 		this->setMapData(hero->getPosX(), hero->getPosY(), INIT);
@@ -334,7 +334,7 @@ void Map::atkPhase()
 void Map::playerController()
 {
 	char _input;
-	while (hero->getFlag() == false)
+	while (!hero->getFlag())
 	{
 		_input = _getch();
 		if (_input == 'w' || _input == 'W') 
