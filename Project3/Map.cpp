@@ -115,7 +115,7 @@ void Map::displayStat()
 {
 	int monstervalue = monsterdata[hero->getPosX()][hero->getPosY()];
 
-	if (hero->getFlag())
+	if (hero->getFlag() == true)
 	{
 		std::cout << red << "Hero is death." << std::endl;
 		std::cout << red << "GAME OVER" << white << std::endl;
@@ -225,7 +225,7 @@ void Map::singleSpawner(const int& value)
 
 void Map::playerSpawner()
 {
-	while(hero->getFlag())
+	while(hero->getFlag() == false)
 	{
 		int p_row = this->randPosX();
 		int p_col = this->randPosY();
@@ -233,6 +233,7 @@ void Map::playerSpawner()
 		{
 			hero->summon(p_row, p_col);
 			this->setMapData(hero->getPosX(), hero->getPosY(), hero->getType());
+			hero->setFlag();
 		}
 	}
 }
