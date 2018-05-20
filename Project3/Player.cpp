@@ -92,3 +92,13 @@ int Player::getType()
 {
 	return TYPE;
 }
+
+void Player::attacked(const int& dmg)
+{
+	p_hp -= dmg;
+	if (p_hp < ABSOLUTE_ZERO)
+	{
+		p_hp = ABSOLUTE_ZERO;
+		is_death = true;
+	}
+}

@@ -1,5 +1,44 @@
 #include "Map.hpp"
 
+inline std::ostream& blue(std::ostream &s)
+{
+	HANDLE hStdout = GetStdHandle(STD_OUTPUT_HANDLE);
+	SetConsoleTextAttribute(hStdout, FOREGROUND_BLUE
+		| FOREGROUND_GREEN | FOREGROUND_INTENSITY);
+	return s;
+}
+
+inline std::ostream& red(std::ostream &s)
+{
+	HANDLE hStdout = GetStdHandle(STD_OUTPUT_HANDLE);
+	SetConsoleTextAttribute(hStdout,
+		FOREGROUND_RED | FOREGROUND_INTENSITY);
+	return s;
+}
+
+inline std::ostream& green(std::ostream &s)
+{
+	HANDLE hStdout = GetStdHandle(STD_OUTPUT_HANDLE);
+	SetConsoleTextAttribute(hStdout,
+		FOREGROUND_GREEN | FOREGROUND_INTENSITY);
+	return s;
+}
+
+inline std::ostream& yellow(std::ostream &s)
+{
+	HANDLE hStdout = GetStdHandle(STD_OUTPUT_HANDLE);
+	SetConsoleTextAttribute(hStdout,
+		FOREGROUND_GREEN | FOREGROUND_RED | FOREGROUND_INTENSITY);
+	return s;
+}
+
+inline std::ostream& white(std::ostream &s)
+{
+	HANDLE hStdout = GetStdHandle(STD_OUTPUT_HANDLE);
+	SetConsoleTextAttribute(hStdout,
+		FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE);
+	return s;
+}
 
 Map::Map()
 {
@@ -24,20 +63,78 @@ Map::~Map()
 void Map::initMap()
 {	
 	mapdata.resize(row, std::vector<int>(col));
+	monsterdata.resize(row, std::vector<int>(col));
 
-	for (int i = 0; i < row; i++)
+	for (int i = 0; i < row; i++) 
+	{
 		for (int j = 0; j < col; j++)
+		{
 			mapdata[i][j] = INIT;
+		}
+	}
+}
+
+void Map::ClearScreen()
+{
+	HANDLE                     hStdOut;
+	CONSOLE_SCREEN_BUFFER_INFO csbi;
+	DWORD                      count;
+	DWORD                      cellCount;
+	COORD                      homeCoords = { 0, 0 };
+
+	hStdOut = GetStdHandle(STD_OUTPUT_HANDLE);
+	if (hStdOut == INVALID_HANDLE_VALUE) return;
+
+	/* Get the number of cells in the current buffer */
+	if (!GetConsoleScreenBufferInfo(hStdOut, &csbi)) return;
+	cellCount = csbi.dwSize.X *csbi.dwSize.Y;
+
+	/* Fill the entire buffer with spaces */
+	if (!FillConsoleOutputCharacter(
+		hStdOut,
+		(TCHAR) ' ',
+		cellCount,
+		homeCoords,
+		&count
+	)) return;
+
+	/* Fill the entire buffer with the current colors and attributes */
+	if (!FillConsoleOutputAttribute(
+		hStdOut,
+		csbi.wAttributes,
+		cellCount,
+		homeCoords,
+		&count
+	)) return;
+
+	/* Move the cursor home */
+	SetConsoleCursorPosition(hStdOut, homeCoords);
+}
+
+void Map::displayStat()
+{
+	int monstervalue = monsterdata[hero->getPosX()][hero->getPosY()];
+
+	if (hero->getFlag())
+	{
+		std::cout << red << "Hero is death." << std::endl;
+		std::cout << red << "GAME OVER" << white << std::endl;
+	}
+	else	
+		std::cout << yellow << "Hero HP: " << hero->getHP() << white << std::endl;
+
+	if (mapdata[hero->getPosX()][hero->getPosY()] == T_BOTH)
+		std::cout << red << "Monster HP: " << monsters[monstervalue]->getHP() << white << std::endl;
 }
 
 void Map::drawMap()
 {
+	this->ClearScreen();
 	this->getTurn();
 	for (int i = 0; i < row; ++i) 
 	{
 		for (int j = 0; j < col; ++j)
 		{
-			//TO-DO: Draw map with color
 			if (mapdata[i][j] == INIT)
 				std::cout << EMPTY << EMPTY << " ";
 			else if(mapdata[i][j] == T_MONSTER)
@@ -49,6 +146,8 @@ void Map::drawMap()
 		}
 		std::cout << std::endl;
 	}
+	std::cout << std::endl;
+	this->displayStat();
 }
 
 void Map::setRow(const int& x)
@@ -91,6 +190,11 @@ void Map::setMapData(const int& x, const int& y, const int& type)
 	mapdata[x][y] = type;
 }
 
+void Map::setMonsterData(const int& x, const int& y, const int& value)
+{
+	monsterdata[x][y] = value;
+}
+
 void Map::spawner()
 {
 	for (int i = 0; i < m_number; i++)
@@ -111,7 +215,8 @@ void Map::singleSpawner(const int& value)
 		if (mapdata[m_row][m_col] == INIT)
 		{
 			monsters.push_back(std::make_shared<Monster>());
-			monsters[value]->spawn(m_row, m_col);
+			monsters[value]->spawn(m_row, m_col, value);
+			this->setMonsterData(m_row, m_col, value);
 			this->setMapData(m_row, m_col, monsters[value]->getType());
 			break;
 		}
@@ -160,66 +265,101 @@ void Map::checkCurr()
 
 void Map::playerMoveUp()
 {
-	this->checkPrev();
-	hero->moveUp();
-	this->checkCurr();
-	this->drawMap();
+	if (hero->getPosX() != ABSOLUTE_ZERO)
+	{
+		this->checkPrev();
+		hero->moveUp();
+		this->checkCurr();
+		this->drawMap();
+	}
 }
 void Map::playerMoveLeft()
 {
-	this->checkPrev();
-	hero->moveLeft();
-	this->checkCurr();
-	this->drawMap();
+	if (hero->getPosY() != ABSOLUTE_ZERO) 
+	{
+		this->checkPrev();
+		hero->moveLeft();
+		this->checkCurr();
+		this->drawMap();
+	}
 }
 void Map::playerMoveDown()
 {
-	this->checkPrev();
-	hero->moveDown();
-	this->checkCurr();
-	this->drawMap();
+	if (hero->getPosX() + 1 != row)
+	{
+		this->checkPrev();
+		hero->moveDown();
+		this->checkCurr();
+		this->drawMap();
+	}
 }
 void Map::playerMoveRight()
 {
-	this->checkPrev();
-	hero->moveRight();
-	this->checkCurr();
+	if (hero->getPosY() + 1 != col)
+	{
+		this->checkPrev();
+		hero->moveRight();
+		this->checkCurr();
+		this->drawMap();
+	}
+}
+
+void Map::checkAfterAtk(const int& value)
+{
+	if (monsters[value]->getHP() == ABSOLUTE_ZERO && hero->getHP() > ABSOLUTE_ZERO)
+	{
+		this->setMapData(hero->getPosX(), hero->getPosY(), hero->getType());
+		this->setMonsterData(hero->getPosX(), hero->getPosY(), NULL);
+	}	
+	else if (hero->getHP() == ABSOLUTE_ZERO && monsters[value]->getHP() > ABSOLUTE_ZERO)
+		this->setMapData(hero->getPosX(), hero->getPosY(), T_MONSTER);
+	else
+		this->setMapData(hero->getPosX(), hero->getPosY(), INIT);
+}
+
+void Map::atkPhase()
+{
+	int monstervalue = monsterdata[hero->getPosX()][hero->getPosY()];
+	int m_atk = monsters[monstervalue]->getRandAtk();
+	int p_atk = hero->getRandAtk();
+
+	hero->attacked(m_atk);
+	monsters[monstervalue]->attacked(p_atk);
+
+	this->checkAfterAtk(monstervalue);
 	this->drawMap();
 }
 
 void Map::playerController()
 {
 	char _input;
-	while (true)
+	while (hero->getFlag() == false)
 	{
 		_input = _getch();
-		if (_input == 'w' || _input == 'W')
+		if (_input == 'w' || _input == 'W') 
 		{
-			if (hero->getPosX() != ABSOLUTE_ZERO)
-			{
-				this->playerMoveUp();
-			}
+			this->playerMoveUp();
 		}
 		else if (_input == 'a' || _input == 'A')
 		{
-			if (hero->getPosY() != ABSOLUTE_ZERO)
-			{
-				this->playerMoveLeft();
-			}
+			
+			this->playerMoveLeft();
 		}
 		else if (_input == 's' || _input == 'S')
 		{
-			if (hero->getPosX()+1 != row)
-			{
-				this->playerMoveDown();
-			}
+			
+			this->playerMoveDown();
 		}
 		else if (_input == 'd' || _input == 'D')
 		{
-			if (hero->getPosY()+1 != col)
-			{
-				this->playerMoveRight();
-			}
+			this->playerMoveRight();
+		}
+		else if (_input == 'q' || _input == 'Q')
+		{
+			if (mapdata[hero->getPosX()][hero->getPosY()] == T_BOTH)
+				this->atkPhase();
+			else
+				std::cout << "No monster here.";
 		}
 	}
 }

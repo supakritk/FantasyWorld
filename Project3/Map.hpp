@@ -4,7 +4,6 @@
 class Map
 {
 private:
-	const int ABSOLUTE_ZERO = 0;
 	const std::string HERO = "H";
 	const std::string MONSTER = "M";
 	const std::string EMPTY = "-";
@@ -18,6 +17,7 @@ private:
 	int turn = 1;
 	
 	std::vector<std::vector<int>> mapdata;
+	std::vector<std::vector<int>> monsterdata;
 	std::vector<std::shared_ptr<Monster>> monsters;
 	std::shared_ptr<Player> hero = std::make_shared<Player>();
 
@@ -27,8 +27,11 @@ public:
 	Map(const int& number);
 	~Map();
 	void initMap();
+	void ClearScreen();
 	void setNumber(const int& number);
 	void setMapData(const int& x, const int& y, const int& type);
+	void setMonsterData(const int& x, const int& y, const int& value);
+	void displayStat();
 	void drawMap();
 	int randPosX();
 	int randPosY();
@@ -47,6 +50,8 @@ public:
 	void playerMoveRight();
 	void checkPrev();
 	void checkCurr();
+	void atkPhase();
+	void checkAfterAtk(const int& value);
 
 	//deprecated
 	void autoNextTurn();

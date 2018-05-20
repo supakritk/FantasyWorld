@@ -13,17 +13,20 @@ private:
 	int m_posx;
 	int m_posy;
 	int m_atk;
+	int m_number;
+
 public:
 	Monster();
 	virtual ~Monster();
 	int getPosX();
 	int getPosY();
-	void spawn(const int& x, const int& y);
+	void spawn(const int& x, const int& y, const int& number);
 	void setHP();
 	int getHP();
 	void reduceHP();
 	int getRandAtk();
 	int getType();
+	int getNumber();
 	void attacked(const int& dmg);
 };
 
