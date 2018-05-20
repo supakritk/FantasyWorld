@@ -96,7 +96,7 @@ int Player::getType()
 void Player::attacked(const int& dmg)
 {
 	p_hp -= dmg;
-	if (p_hp < ABSOLUTE_ZERO)
+	if (p_hp <= ABSOLUTE_ZERO)
 	{
 		is_death = !is_death;
 		p_hp = ABSOLUTE_ZERO;

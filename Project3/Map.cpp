@@ -129,7 +129,7 @@ void Map::displayStat()
 
 void Map::drawMap()
 {
-	this->ClearScreen();
+	//this->ClearScreen();
 	this->getTurn();
 	for (int i = 0; i < row; ++i) 
 	{
@@ -307,15 +307,23 @@ void Map::playerMoveRight()
 
 void Map::checkAfterAtk(const int& value)
 {
-	if (monsters[value]->getHP() == ABSOLUTE_ZERO && !hero->getFlag())
+	if (monsters[value]->getHP() <= ABSOLUTE_ZERO && (!hero->getFlag()))
 	{
 		this->setMapData(hero->getPosX(), hero->getPosY(), hero->getType());
 		this->setMonsterData(hero->getPosX(), hero->getPosY(), NULL);
 	}	
 	else if (hero->getFlag() && monsters[value]->getHP() > ABSOLUTE_ZERO)
+	{
 		this->setMapData(hero->getPosX(), hero->getPosY(), T_MONSTER);
+	}
+	else if ((!hero->getFlag()) && monsters[value]->getHP() > ABSOLUTE_ZERO)
+	{
+		this->setMapData(hero->getPosX(), hero->getPosY(), T_BOTH);
+	}
 	else
+	{
 		this->setMapData(hero->getPosX(), hero->getPosY(), INIT);
+	}
 }
 
 void Map::atkPhase()
