@@ -37,4 +37,3 @@ public:
 	int getType();
 	void attacked(const int& dmg);
 };
-

@@ -129,7 +129,7 @@ void Map::displayStat()
 
 void Map::drawMap()
 {
-	//this->ClearScreen();
+	this->ClearScreen();
 	this->getTurn();
 	for (int i = 0; i < row; ++i) 
 	{
@@ -390,6 +390,7 @@ void Map::playerController()
 
 
 /*---------------------- Old Next Turn -----------------------------*/
+
 void Map::nextTurn()
 {
 	for (int i = 0; i < m_number; i++)
