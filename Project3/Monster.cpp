@@ -10,17 +10,43 @@ Monster::~Monster()
 {
 }
 
-void Monster::spawn(const int& x, const int& y, const int& number)
+void Monster::initStat(const int& id, const int & hp, const int & atk, const int & x, const int & y)
 {
-	m_number = number;
-	m_posx = x;
-	m_posy = y;
-	m_HP = rand() % START_HP + HP_RANGE;
+	this->setNumber(id);
+	this->setHP(hp);
+	this->setAtk(atk);
+	this->setPosX(x);
+	this->setPosY(y);
 }
 
-void Monster::setHP()
+void Monster::randType(const int& size)
 {
-	m_HP = rand() % START_HP + HP_RANGE;
+	m_type = rand() % size;
+}
+
+void Monster::setNumber(const int& id)
+{
+	m_id = id;
+}
+
+void Monster::setPosX(const int& x)
+{
+	m_posx = x;
+}
+
+void Monster::setPosY(const int& y)
+{
+	m_posy = y;
+}
+
+void Monster::setHP(const int& hp)
+{
+	m_HP = hp;
+}
+
+void Monster::setAtk(const int& atk)
+{
+	m_atk = atk;
 }
 
 int Monster::getHP()
@@ -38,20 +64,14 @@ int Monster::getPosY()
 	return m_posy;
 }
 
-void Monster::reduceHP()
+int Monster::getAtk()
 {
-	m_HP--;
-}
-
-int Monster::getRandAtk()
-{
-	m_atk = rand() % START_ATK + ATK_RANGE;
 	return m_atk;
 }
 
 int Monster::getNumber()
 {
-	return m_number;
+	return m_id;
 }
 
 int Monster::getType()
@@ -64,4 +84,20 @@ void Monster::attacked(const int& dmg)
 	m_HP -= dmg;
 	if (m_HP < ABSOLUTE_ZERO)
 		m_HP = ABSOLUTE_ZERO;
+}
+
+
+
+/*------------------------ Outdated ----------------------------- */
+void Monster::spawn(const int& x, const int& y, const int& number)
+{
+	m_id = number;
+	m_posx = x;
+	m_posy = y;
+	m_HP = rand() % START_HP + HP_RANGE;
+}
+
+void Monster::reduceHP()
+{
+	m_HP--;
 }

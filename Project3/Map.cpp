@@ -44,14 +44,14 @@ Map::Map()
 {
 }
 
-Map::Map(const int& x, const int& y, const int& number)
+Map::Map(int x, int y, int number)
 {
 	this->setNumber(number);
 	this->setRow(x);
 	this->setCol(y);
 }
 
-Map::Map(const int& number)
+Map::Map(int number)
 {
 	this->setNumber(number);
 }
@@ -266,7 +266,7 @@ void Map::checkCurr()
 
 void Map::playerMoveUp()
 {
-	if (hero->getPosX() != ABSOLUTE_ZERO)
+	if (hero->getPosY() != ABSOLUTE_ZERO)
 	{
 		this->checkPrev();
 		hero->moveUp();
@@ -276,7 +276,7 @@ void Map::playerMoveUp()
 }
 void Map::playerMoveLeft()
 {
-	if (hero->getPosY() != ABSOLUTE_ZERO) 
+	if (hero->getPosX() != ABSOLUTE_ZERO) 
 	{
 		this->checkPrev();
 		hero->moveLeft();
@@ -286,7 +286,7 @@ void Map::playerMoveLeft()
 }
 void Map::playerMoveDown()
 {
-	if (hero->getPosX() + 1 != row)
+	if (hero->getPosY() + 1 != row)
 	{
 		this->checkPrev();
 		hero->moveDown();
@@ -296,7 +296,7 @@ void Map::playerMoveDown()
 }
 void Map::playerMoveRight()
 {
-	if (hero->getPosY() + 1 != col)
+	if (hero->getPosX() + 1 != col)
 	{
 		this->checkPrev();
 		hero->moveRight();
@@ -329,7 +329,7 @@ void Map::checkAfterAtk(const int& value)
 void Map::atkPhase()
 {
 	int monstervalue = monsterdata[hero->getPosX()][hero->getPosY()];
-	int m_atk = monsters[monstervalue]->getRandAtk();
+	int m_atk = monsters[monstervalue]->getAtk();
 	int p_atk = hero->getRandAtk();
 
 	hero->attacked(m_atk);
@@ -344,7 +344,7 @@ void Map::playerController()
 	char _input;
 	while (!hero->getFlag())
 	{
-		_input = _getch();
+		_input = static_cast<char>(_getch());
 		if (_input == 'w' || _input == 'W') 
 		{
 			this->playerMoveUp();

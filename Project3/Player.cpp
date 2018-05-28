@@ -35,22 +35,22 @@ void Player::setPos(const int& x, const int& y)
 
 void Player::moveUp()
 {
-	p_posx -= 1;
+	p_posy -= 1;
 }
 
 void Player::moveDown()
 {
-	p_posx += 1;
+	p_posy += 1;
 }
 
 void Player::moveLeft()
 {
-	p_posy -= 1;
+	p_posx -= 1;
 }
 
 void Player::moveRight()
 {
-	p_posy += 1;
+	p_posx += 1;
 }
 
 int Player::getPosX()

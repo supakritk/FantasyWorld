@@ -12,9 +12,10 @@
 #include <string>
 #include <windows.h>
 #include <conio.h>
-
+#include <fstream>
+#include <sstream>
 
 #define REQUIRE(condition) assert(condition)
 #define PROMISE(condition) assert(condition)
 
-const int ABSOLUTE_ZERO = 0;
+static const int ABSOLUTE_ZERO = 0;

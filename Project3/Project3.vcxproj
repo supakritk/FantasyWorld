@@ -115,16 +115,24 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="GameController.cpp" />
+    <ClCompile Include="InputManager.cpp" />
     <ClCompile Include="Map.cpp" />
+    <ClCompile Include="MetaData.cpp" />
     <ClCompile Include="Monster.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="Source.cpp" />
+    <ClCompile Include="Spawner.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="GameController.hpp" />
     <ClInclude Include="Header.hpp" />
+    <ClInclude Include="InputManager.hpp" />
     <ClInclude Include="Map.hpp" />
+    <ClInclude Include="MetaData.hpp" />
     <ClInclude Include="Monster.hpp" />
     <ClInclude Include="Player.hpp" />
+    <ClInclude Include="Spawner.hpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

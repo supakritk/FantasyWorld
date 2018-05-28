@@ -1,6 +1,7 @@
 #pragma once
 #include "Monster.hpp"
 #include "Player.hpp"
+
 class Map
 {
 private:
@@ -8,7 +9,7 @@ private:
 	const std::string MONSTER = "M";
 	const std::string EMPTY = "-";
 	const float DIFF = 2.0;
-	const int MAX_TURN = 5;
+	static const int MAX_TURN = 5;
 	const enum TYPE { INIT = 0, T_MONSTER = 1, T_HERO = 2, T_BOTH = 3};
 
 	int m_number = 100;
@@ -23,8 +24,8 @@ private:
 
 public:
 	Map();
-	Map(const int& x, const int& y, const int& number);
-	Map(const int& number);
+	Map(int x, int y, int number);
+	Map(int number);
 	~Map();
 	void initMap();
 	void ClearScreen();

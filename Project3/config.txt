@@ -1,0 +1,6 @@
+Slime Zombie,30,2
+Wolf Zombie,30,2
+Zombie Lord,50,4
+Orc Warrior,20,5
+Orc Guardian,50,3
+King Orc,100,10
