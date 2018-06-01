@@ -4,7 +4,7 @@
 class Player
 {
 private:
-	const int START_HP = 10;
+	const int START_HP = 100;
 	const int HP_RANGE = 10;
 	const int START_ATK = 2;
 	const int ATK_RANGE = 5;

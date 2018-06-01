@@ -20,13 +20,13 @@ private:
 public:
 	Monster();
 	virtual ~Monster();
-	void initStat(const int& id, const int& hp, const int& atk, const int& x, const int& y);
-	void randType(const int& size);
+	void initStat(const int& id, const int& type_id, const int& hp, const int& atk, const int& x, const int& y);
 	void setNumber(const int& id);
+	void setMonsType(const int& type_id);
 	void setPosX(const int& x);
 	void setPosY(const int& y);
-	void setHP(const int& hp);
-	void setAtk(const int& atk);
+	void setHP(const int& type_id);
+	void setAtk(const int& type_id);
 	int getPosX();
 	int getPosY();
 	int getHP();

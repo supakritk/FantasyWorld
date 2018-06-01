@@ -17,12 +17,12 @@ private:
 	int col = 30;
 	int turn = 1;
 	
-	std::vector<std::vector<int>> mapdata;
-	std::vector<std::vector<int>> monsterdata;
-	std::vector<std::shared_ptr<Monster>> monsters;
-	std::shared_ptr<Player> hero = std::make_shared<Player>();
+	std::shared_ptr<Player> hero;
 
 public:
+	std::vector<std::vector<int>> mapdata;
+	std::vector<std::vector<int>> monsterdata;
+
 	Map();
 	Map(int x, int y, int number);
 	Map(int number);
@@ -41,8 +41,8 @@ public:
 	void getTurn();
 	int getRow();
 	int getCol();
-	void spawner();
-	void singleSpawner(const int& value);
+	int getNumber();
+	
 	void playerSpawner();
 	void playerController();
 	void playerMoveUp();
@@ -57,5 +57,7 @@ public:
 	//deprecated
 	void autoNextTurn();
 	void nextTurn();
+	void spawner();
+	void singleSpawner(const int& value);
 };
 

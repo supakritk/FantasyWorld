@@ -10,23 +10,24 @@ Monster::~Monster()
 {
 }
 
-void Monster::initStat(const int& id, const int & hp, const int & atk, const int & x, const int & y)
+void Monster::initStat(const int& id, const int& type_id, const int& hp, const int& atk, const int& x, const int& y)
 {
 	this->setNumber(id);
+	this->setMonsType(type_id);
 	this->setHP(hp);
 	this->setAtk(atk);
 	this->setPosX(x);
 	this->setPosY(y);
 }
 
-void Monster::randType(const int& size)
-{
-	m_type = rand() % size;
-}
-
 void Monster::setNumber(const int& id)
 {
 	m_id = id;
+}
+
+void Monster::setMonsType(const int & type_id)
+{
+	m_type = type_id;
 }
 
 void Monster::setPosX(const int& x)

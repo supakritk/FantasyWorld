@@ -49,3 +49,13 @@ int MetaData::getMAtk(const int & id)
 {
 	return m_atk_data[id];
 }
+
+int MetaData::getRow()
+{
+	return row;
+}
+
+int MetaData::getCol()
+{
+	return col;
+}

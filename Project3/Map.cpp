@@ -1,47 +1,55 @@
 #include "Map.hpp"
 
-inline std::ostream& blue(std::ostream &s)
+namespace color
 {
-	HANDLE hStdout = GetStdHandle(STD_OUTPUT_HANDLE);
-	SetConsoleTextAttribute(hStdout, FOREGROUND_BLUE
-		| FOREGROUND_GREEN | FOREGROUND_INTENSITY);
-	return s;
+	inline std::ostream& blue(std::ostream &s)
+	{
+		HANDLE hStdout = GetStdHandle(STD_OUTPUT_HANDLE);
+		SetConsoleTextAttribute(hStdout, FOREGROUND_BLUE
+			| FOREGROUND_GREEN | FOREGROUND_INTENSITY);
+		return s;
+	}
+
+	inline std::ostream& red(std::ostream &s)
+	{
+		HANDLE hStdout = GetStdHandle(STD_OUTPUT_HANDLE);
+		SetConsoleTextAttribute(hStdout,
+			FOREGROUND_RED | FOREGROUND_INTENSITY);
+		return s;
+	}
+
+	inline std::ostream& green(std::ostream &s)
+	{
+		HANDLE hStdout = GetStdHandle(STD_OUTPUT_HANDLE);
+		SetConsoleTextAttribute(hStdout,
+			FOREGROUND_GREEN | FOREGROUND_INTENSITY);
+		return s;
+	}
+
+	inline std::ostream& yellow(std::ostream &s)
+	{
+		HANDLE hStdout = GetStdHandle(STD_OUTPUT_HANDLE);
+		SetConsoleTextAttribute(hStdout,
+			FOREGROUND_GREEN | FOREGROUND_RED | FOREGROUND_INTENSITY);
+		return s;
+	}
+
+	inline std::ostream& white(std::ostream &s)
+	{
+		HANDLE hStdout = GetStdHandle(STD_OUTPUT_HANDLE);
+		SetConsoleTextAttribute(hStdout,
+			FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE);
+		return s;
+	}
+
 }
 
-inline std::ostream& red(std::ostream &s)
-{
-	HANDLE hStdout = GetStdHandle(STD_OUTPUT_HANDLE);
-	SetConsoleTextAttribute(hStdout,
-		FOREGROUND_RED | FOREGROUND_INTENSITY);
-	return s;
-}
-
-inline std::ostream& green(std::ostream &s)
-{
-	HANDLE hStdout = GetStdHandle(STD_OUTPUT_HANDLE);
-	SetConsoleTextAttribute(hStdout,
-		FOREGROUND_GREEN | FOREGROUND_INTENSITY);
-	return s;
-}
-
-inline std::ostream& yellow(std::ostream &s)
-{
-	HANDLE hStdout = GetStdHandle(STD_OUTPUT_HANDLE);
-	SetConsoleTextAttribute(hStdout,
-		FOREGROUND_GREEN | FOREGROUND_RED | FOREGROUND_INTENSITY);
-	return s;
-}
-
-inline std::ostream& white(std::ostream &s)
-{
-	HANDLE hStdout = GetStdHandle(STD_OUTPUT_HANDLE);
-	SetConsoleTextAttribute(hStdout,
-		FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE);
-	return s;
-}
+using namespace color;
 
 Map::Map()
 {
+	hero = std::make_shared<Player>();
+	this->initMap();
 }
 
 Map::Map(int x, int y, int number)
@@ -49,11 +57,15 @@ Map::Map(int x, int y, int number)
 	this->setNumber(number);
 	this->setRow(x);
 	this->setCol(y);
+	hero = std::make_shared<Player>();
+	this->initMap();
 }
 
 Map::Map(int number)
 {
 	this->setNumber(number);
+	hero = std::make_shared<Player>();
+	this->initMap();
 }
 
 Map::~Map()
@@ -170,6 +182,11 @@ int Map::getCol()
 	return col;
 }
 
+int Map::getNumber()
+{
+	return m_number;
+}
+
 int Map::randPosX() 
 {
 	return rand()% row;
@@ -193,34 +210,6 @@ void Map::setMapData(const int& x, const int& y, const int& type)
 void Map::setMonsterData(const int& x, const int& y, const int& value)
 {
 	monsterdata[x][y] = value;
-}
-
-void Map::spawner()
-{
-	for (int i = 0; i < m_number; i++)
-	{
-		this->singleSpawner(i);
-	}
-	this->playerSpawner();
-	this->drawMap();
-}
-
-void Map::singleSpawner(const int& value)
-{
-	while (true)
-	{
-		int m_row = this->randPosX();
-		int m_col = this->randPosY();
-
-		if (mapdata[m_row][m_col] == INIT)
-		{
-			monsters.push_back(std::make_shared<Monster>());
-			monsters[value]->spawn(m_row, m_col, value);
-			this->setMonsterData(m_row, m_col, value);
-			this->setMapData(m_row, m_col, monsters[value]->getType());
-			break;
-		}
-	}
 }
 
 void Map::playerSpawner()
@@ -271,7 +260,6 @@ void Map::playerMoveUp()
 		this->checkPrev();
 		hero->moveUp();
 		this->checkCurr();
-		this->drawMap();
 	}
 }
 void Map::playerMoveLeft()
@@ -281,7 +269,6 @@ void Map::playerMoveLeft()
 		this->checkPrev();
 		hero->moveLeft();
 		this->checkCurr();
-		this->drawMap();
 	}
 }
 void Map::playerMoveDown()
@@ -291,7 +278,6 @@ void Map::playerMoveDown()
 		this->checkPrev();
 		hero->moveDown();
 		this->checkCurr();
-		this->drawMap();
 	}
 }
 void Map::playerMoveRight()
@@ -301,7 +287,6 @@ void Map::playerMoveRight()
 		this->checkPrev();
 		hero->moveRight();
 		this->checkCurr();
-		this->drawMap();
 	}
 }
 
@@ -336,7 +321,6 @@ void Map::atkPhase()
 	monsters[monstervalue]->attacked(p_atk);
 
 	this->checkAfterAtk(monstervalue);
-	this->drawMap();
 }
 
 void Map::playerController()
@@ -370,6 +354,7 @@ void Map::playerController()
 			else
 				std::cout << "No monster here.";
 		}
+		this->drawMap();
 	}
 }
 
@@ -423,6 +408,34 @@ void Map::autoNextTurn()
 		}
 		if (turn > MAX_TURN)
 			con = !con;
+	}
+}
+
+void Map::spawner()
+{
+	for (int i = 0; i < m_number; i++)
+	{
+		this->singleSpawner(i);
+	}
+	this->playerSpawner();
+	this->drawMap();
+}
+
+void Map::singleSpawner(const int& value)
+{
+	while (true)
+	{
+		int m_row = this->randPosX();
+		int m_col = this->randPosY();
+
+		if (mapdata[m_row][m_col] == INIT)
+		{
+			monsters.push_back(std::make_shared<Monster>());
+			monsters[value]->spawn(m_row, m_col, value);
+			this->setMonsterData(m_row, m_col, value);
+			this->setMapData(m_row, m_col, monsters[value]->getType());
+			break;
+		}
 	}
 }
 

@@ -1,8 +1,6 @@
 #pragma once
 #include "Header.hpp"
-#include "MetaData.hpp"
-#include "Player.hpp"
-#include "Monster.hpp"
+#include "Spawner.hpp"
 #include "Map.hpp"
 #include "InputManager.hpp"
 
@@ -14,14 +12,12 @@ private:
 public:
 	std::shared_ptr<InputManager> input_manager;
 	std::shared_ptr<Map> map;
-	std::shared_ptr<Player> player;
-	std::shared_ptr<MetaData> metadata;
+	std::shared_ptr<Spawner> spawner;
 
 	GameController();
 	~GameController();
 	bool gameStart();
 	void gameEnd();
 	bool exit();
-	void clearScreen();
 };
 
